@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 0}
+  m_Name: SalonItem
+  m_EditorClassIdentifier: Assembly-CSharp::ItemSO
+  items:
+  - id: 0
+    DropPrefab: {fileID: 8462316232653194100, guid: 7770da83671f03544b0021767fd7c88f, type: 3}
+  - id: 1
+    DropPrefab: {fileID: 4459802400263892392, guid: dee646753c0c9c94eb822149b2de8262, type: 3}

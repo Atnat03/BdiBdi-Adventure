@@ -1,0 +1,46 @@
+{
+    "version": 1,
+    "name": "Touch",
+    "maps": [
+        {
+            "name": "Drawing",
+            "id": "9571f112-680d-4ee2-917a-ae27787533c9",
+            "actions": [
+                {
+                    "name": "Draw",
+                    "type": "Button",
+                    "id": "ca192edc-d3c1-450e-b44e-4503cae23ebe",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "7af7291b-4556-4648-b973-5ef906d136c3",
+                    "path": "<Touchscreen>/Press",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Draw",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "b057327f-324b-46c3-a0a5-94bc74d7d92b",
+                    "path": "<Mouse>/leftButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Draw",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        }
+    ],
+    "controlSchemes": []
+}
