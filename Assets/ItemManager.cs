@@ -26,16 +26,3 @@ public class ItemManager : MonoBehaviour
     }
 }
 
-[CreateAssetMenu(fileName = "ItemManager", menuName = "ItemManager")]
-public class ItemSO : ScriptableObject
-{
-    public List<Item> items;
-}
-
-[Serializable]
-public class Item
-{
-    public int id;
-    public GameObject DropPrefab;
-}
-

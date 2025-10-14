@@ -3,10 +3,21 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum RangementType
+{
+    Destroyer,
+    Placer
+}
+
 public class PointDeRangement : MonoBehaviour
 {
-    [SerializeField] private List<int> itemCanBePutHere;
+    [SerializeField] public List<int> itemCanBePutHere;
+    [SerializeField] public bool canPutAllItem = false;
 
+    [SerializeField] private RangementType rangementType;
+
+    [SerializeField] private Transform emplacementDeRangement;
+    
     public void OnEnable()
     {
         PlayerObjectManager.OnDropItem += DetectItem;
@@ -23,12 +34,42 @@ public class PointDeRangement : MonoBehaviour
 
         if (zoneCollider.bounds.Contains(item.transform.position))
         {
-            Debug.Log("Detect item");
-
-            if(itemCanBePutHere.Contains(item.id))
+            if (canPutAllItem)
             {
-                Debug.Log("L'objet est dans la zone !");
+                if (item.GetComponent<PickUpItem>())
+                {
+                    PerformAction(item.gameObject);
+                }
+            }else 
+            { 
+                if(itemCanBePutHere.Contains(item.id))
+                {
+                    PerformAction(item.gameObject);
+                }
             }
         }
+    }
+
+    void PerformAction(GameObject item)
+    {
+        switch (rangementType)
+        {
+            case RangementType.Destroyer:
+                Destroyer(item);
+                break;
+            case RangementType.Placer:
+                Placer(item);
+                break;
+        }
+    }
+
+    private void Placer(GameObject item)
+    {
+        item.transform.position = emplacementDeRangement.position;
+    }
+
+    private void Destroyer(GameObject item)
+    {
+        Destroy(item.gameObject);
     }
 }

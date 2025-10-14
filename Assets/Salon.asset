@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 0}
-  m_Name: SalonItem
+  m_Name: Salon
   m_EditorClassIdentifier: Assembly-CSharp::ItemSO
   items:
   - id: 0
-    DropPrefab: {fileID: 8462316232653194100, guid: 7770da83671f03544b0021767fd7c88f, type: 3}
+    DropPrefab: {fileID: 2811997494605179793, guid: 513e2754f39fde545812b72568e9a44c, type: 3}
   - id: 1
-    DropPrefab: {fileID: 4459802400263892392, guid: dee646753c0c9c94eb822149b2de8262, type: 3}
+    DropPrefab: {fileID: 5634852076552248380, guid: 37ed23604eb350e4ab60fca2a54929d5, type: 3}
