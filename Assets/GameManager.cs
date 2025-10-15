@@ -24,8 +24,8 @@ public class GameManager : MonoBehaviour
     
     private void UpdateUI()
     {
-      txtRoomName.text = RoomManager.instance.currentRoom.ToString();
-    } 
+        txtRoomName.text = RoomManager.instance.currentRoom.ToString();
+    }
     
     
     

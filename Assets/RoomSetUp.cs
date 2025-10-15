@@ -2,34 +2,55 @@ using System.Collections.Generic;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
+[System.Serializable]
+public class MandatoryFurniture
+{
+    public GameObject furnitureData;
+    public Transform point;
+}
+
 public class RoomSetUp : MonoBehaviour
 {
+    public RoomDataScriptable data;
+    
     [SerializeField] private Transform[] possiblePoint;
     private List<Transform> lastedPoint = new List<Transform>();
     
-    [SerializeField] private FurnitureScriptableObject furnitures;
-    private List<FurnitureData> lastedFurnitures;
+    private List<GameObject> lastedFurnitures;
 
     [SerializeField] private int miniFurnitureNumber = 3;
     [SerializeField] private int maxiFurnitureNumber = 6;
-    
+
+    [SerializeField] private List<MandatoryFurniture> mandatoryFurnitures;
+
     public void SetUp()
     {
         lastedPoint = new List<Transform>(possiblePoint);
-        lastedFurnitures = new List<FurnitureData>(furnitures.furnitures);
-        
-        int numberFurniture = Random.Range(miniFurnitureNumber, maxiFurnitureNumber + 1);
+        lastedFurnitures = new List<GameObject>(data.possibleFurniture);
 
+        foreach (var mandatory in mandatoryFurnitures)
+        {
+            if (mandatory.furnitureData != null && mandatory.furnitureData != null &&
+                mandatory.point != null)
+            {
+                Instantiate(mandatory.furnitureData, mandatory.point.position, Quaternion.identity, transform);
+
+                lastedPoint.Remove(mandatory.point);
+                lastedFurnitures.Remove(mandatory.furnitureData);
+            }
+        }
+
+        int numberFurniture = Random.Range(miniFurnitureNumber, maxiFurnitureNumber + 1);
         for (int i = 0; i < numberFurniture; i++)
         {
             if (lastedFurnitures.Count == 0 || lastedPoint.Count == 0) break;
 
-            FurnitureData furnitureData = GetRandomFromList(lastedFurnitures);
+            GameObject furnitureData = GetRandomFromList(lastedFurnitures);
             Transform point = GetRandomFromList(lastedPoint);
 
-            if (furnitureData != null && furnitureData.furniturePrefab != null && point != null)
+            if (furnitureData != null && furnitureData != null && point != null)
             {
-                Instantiate(furnitureData.furniturePrefab, point.position, Quaternion.identity, transform);
+                Instantiate(furnitureData, point.position, Quaternion.identity, transform);
             }
         }
     }

@@ -28,5 +28,8 @@ MonoBehaviour:
   - position: {x: 0, y: -4.8, z: 0}
     playerSpawnOffset: {x: 0, y: 4, z: 0}
     direction: 3
-  possibleFurniture: []
+  possibleFurniture:
+  - {fileID: 550073268455368361, guid: 428fde11a3cee0943a38b22bd2812d56, type: 3}
+  - {fileID: 1340658394886223641, guid: 1e8ae183e58ede848a2c8024c46906e7, type: 3}
+  - {fileID: 7965172379357440955, guid: b689d2368bb02b346b448d9aae6f28fc, type: 3}
   itemRoomData: {fileID: 0}
