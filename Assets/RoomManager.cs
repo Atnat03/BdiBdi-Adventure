@@ -25,7 +25,7 @@ public class RoomManager : MonoBehaviour
 
     private Dictionary<Room, Transform> roomDictionary;
 
-    [SerializeField] private Camera camera;
+    [SerializeField] private Camera mainCamera;
     [SerializeField] private GameObject player;
 
     private void Awake()
@@ -40,14 +40,14 @@ public class RoomManager : MonoBehaviour
         }
 
         if (roomDictionary.ContainsKey(Room.Salon))
-            camera.transform.position = new Vector3(roomDictionary[Room.Salon].position.x, roomDictionary[Room.Salon].position.y, -10);
+            mainCamera.transform.position = new Vector3(roomDictionary[Room.Salon].position.x, roomDictionary[Room.Salon].position.y, -10);
     }
 
     public void ChangeRoom(Room idRoom, Vector3 offset)
     {
         if (!roomDictionary.ContainsKey(idRoom)) return;
 
-        camera.transform.position = new Vector3(roomDictionary[idRoom].position.x, roomDictionary[idRoom].position.y, -10);
+        mainCamera.transform.position = new Vector3(roomDictionary[idRoom].position.x, roomDictionary[idRoom].position.y, -10);
         player.transform.position = roomDictionary[idRoom].position + offset;
     }
 }

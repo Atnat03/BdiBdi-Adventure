@@ -1,7 +1,9 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public enum RangementType
 {
@@ -16,8 +18,17 @@ public class PointDeRangement : MonoBehaviour
 
     [SerializeField] private RangementType rangementType;
 
-    [SerializeField] private Transform emplacementDeRangement;
-    
+    [SerializeField] private Transform[] emplacementDeRangement;
+    private List<Transform> currentUnusePlace = new();
+
+    private void Start()
+    {
+        foreach (Transform t in emplacementDeRangement)
+        {
+            currentUnusePlace.Add(t);
+        }
+    }
+
     public void OnEnable()
     {
         PlayerObjectManager.OnDropItem += DetectItem;
@@ -50,6 +61,11 @@ public class PointDeRangement : MonoBehaviour
         }
     }
 
+    public bool HasPlace()
+    {
+        return (currentUnusePlace.Count > 0);
+    }
+
     void PerformAction(GameObject item)
     {
         switch (rangementType)
@@ -65,7 +81,14 @@ public class PointDeRangement : MonoBehaviour
 
     private void Placer(GameObject item)
     {
-        item.transform.position = emplacementDeRangement.position;
+        if(currentUnusePlace.Count <= 0) return;
+        
+        Transform newT = currentUnusePlace[Random.Range(0, currentUnusePlace.Count)];
+        currentUnusePlace.Remove(newT);
+        
+        item.transform.position = newT.position;
+        item.transform.parent = transform;
+        Destroy(item.GetComponent<PickUpItem>());
     }
 
     private void Destroyer(GameObject item)

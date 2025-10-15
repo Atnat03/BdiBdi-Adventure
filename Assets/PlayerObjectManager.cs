@@ -1,27 +1,23 @@
 using System;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class PlayerObjectManager : MonoBehaviour
 {
     public static PlayerObjectManager instance;
-
     public static Action<PickUpItem> OnDropItem;
-    
+
     [SerializeField] private Transform spawnObject;
     [SerializeField] public bool alreadyCarryObject;
-
     [SerializeField] private Button dropButton;
 
-    PickUpItem carriedItem;
-    Item currentItem;
+    private PickUpItem carriedItem;
+    private Item currentItem;
     private Item[] itemsCloseToPlayer;
 
     private void Awake()
     {
         instance = this;
-        
         dropButton.onClick.AddListener(DropObject);
     }
 
@@ -33,27 +29,25 @@ public class PlayerObjectManager : MonoBehaviour
 
     private void Update()
     {
-        dropButton.interactable = alreadyCarryObject && CheckEmplacement();
+        dropButton.interactable = alreadyCarryObject && carriedItem != null && CheckEmplacement();
     }
-    
+
     public void PickItem(Item item)
     {
         alreadyCarryObject = true;
-        
-        Instantiate(item.DropPrefab, spawnObject.transform.position, Quaternion.identity, spawnObject);
-        carriedItem = item.DropPrefab.GetComponent<PickUpItem>();
+        GameObject itemInstance = Instantiate(item.DropPrefab, spawnObject.position, Quaternion.identity, spawnObject);
+        carriedItem = itemInstance.GetComponent<PickUpItem>();
         currentItem = ItemManager.instance.GetItemById(item.id);
     }
 
     public void DropObject()
     {
-        if(!alreadyCarryObject) return;
-
+        if (!alreadyCarryObject || carriedItem == null) return;
         if (!CheckEmplacement()) return;
 
         alreadyCarryObject = false;
 
-        SpriteRenderer spriteRenderer = gameObject.transform.GetComponent<SpriteRenderer>();
+        SpriteRenderer spriteRenderer = gameObject.GetComponent<SpriteRenderer>();
         float rotateValue = spriteRenderer.flipX ? -0.5f : 0.5f;
         Vector2 pos = new Vector2(transform.position.x + rotateValue, transform.position.y);
 
@@ -63,35 +57,30 @@ public class PlayerObjectManager : MonoBehaviour
         OnDropItem?.Invoke(droppedItem);
 
         carriedItem = null;
-        Destroy(spawnObject.transform.GetChild(0).gameObject);
+        Destroy(spawnObject.GetChild(0).gameObject);
     }
 
     public bool CheckEmplacement()
     {
         Vector2 direction = GetComponent<SpriteRenderer>().flipX ? Vector2.left : Vector2.right;
-        Vector2 origin = GetComponent<SpriteRenderer>().flipX ? 
+        Vector2 origin = GetComponent<SpriteRenderer>().flipX ?
             new Vector2(transform.position.x - 0.35f, transform.position.y) :
             new Vector2(transform.position.x + 0.35f, transform.position.y);
 
         RaycastHit2D hit = Physics2D.Raycast(origin, direction, 0.2f);
         Debug.DrawRay(origin, direction * 0.2f, Color.red, 0.2f);
 
-        bool canPlace = true;
-
         if (hit.collider != null)
         {
             PointDeRangement p = hit.collider.GetComponent<PointDeRangement>();
             if (p != null)
             {
-                if (!p.canPutAllItem && !p.itemCanBePutHere.Contains(carriedItem.id))
-                {
-                    canPlace = false;
-                }
+                bool itemCompatible = p.canPutAllItem || p.itemCanBePutHere.Contains(carriedItem.id);
+                return itemCompatible && p.HasPlace();
             }
         }
 
-        return canPlace;
+        return true;
     }
-
 
 }
