@@ -20,18 +20,28 @@ public struct RoomEntry
 public class RoomManager : MonoBehaviour
 {
     public static RoomManager instance;
+
+    public static Action OnRoomChange;
     
     private Dictionary<Room, Transform> roomDictionary;
 
-    [SerializeField] private Camera mainCamera;
-    [SerializeField] private GameObject player;
+    private Camera mainCamera;
+    private GameObject player;
+
+    public Room currentRoom = Room.Salon;
 
     private void Awake()
     {
         instance = this;
         roomDictionary = new Dictionary<Room, Transform>();
     }
-    
+
+    private void Start()
+    {
+        mainCamera = GameManager.instance.mainCamera;
+        player = GameManager.instance.player;
+    }
+
     public Transform GetRoomTransform(Room idRoom)
     {
         if (roomDictionary.TryGetValue(idRoom, out Transform t))
@@ -51,5 +61,9 @@ public class RoomManager : MonoBehaviour
 
         mainCamera.transform.position = new Vector3(roomDictionary[idRoom].position.x, roomDictionary[idRoom].position.y, -10);
         player.transform.position = roomDictionary[idRoom].position + offset;
+        
+        currentRoom = idRoom;
+        
+        OnRoomChange?.Invoke();
     }
 }

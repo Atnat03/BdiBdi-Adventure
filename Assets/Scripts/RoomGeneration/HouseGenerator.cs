@@ -1,8 +1,13 @@
+using System;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class HouseGenerator : MonoBehaviour
 {
+	public static Action<Vector3> OnHouseFinishGeneration;
+
     public List<RoomDataScriptable> availableRooms;
     public int gridSize = 4;
     public float roomSpacing = 10f;
@@ -22,19 +27,15 @@ public class HouseGenerator : MonoBehaviour
         center = new Vector2Int(gridSize / 2, gridSize / 2);
         Debug.ClearDeveloperConsole();
 
-        // 1️⃣ Placer le salon au centre
         grid[center.x, center.y] = Room.Salon.ToString();
 
-        // 2️⃣ Créer la liste dynamique des cases disponibles
         List<Vector2Int> availablePositions = new List<Vector2Int>();
         AddAdjacentPositions(center, availablePositions);
 
-        // 3️⃣ Mélanger les pièces sauf le salon
         List<RoomDataScriptable> roomsToPlace = new List<RoomDataScriptable>(availableRooms);
         roomsToPlace.RemoveAll(r => r.type == Room.Salon);
         ShuffleList(roomsToPlace);
 
-        // 4️⃣ Placer les autres pièces
         foreach (var room in roomsToPlace)
         {
             if (availablePositions.Count == 0)
@@ -43,22 +44,20 @@ public class HouseGenerator : MonoBehaviour
                 continue;
             }
 
-            // Choisir une case aléatoire parmi les disponibles
             int idx = Random.Range(0, availablePositions.Count);
             Vector2Int pos = availablePositions[idx];
 
-            // Placer la pièce
             grid[pos.x, pos.y] = room.type.ToString();
 
-            // Retirer la case utilisée
             availablePositions.RemoveAt(idx);
 
-            // Ajouter ses nouvelles cases adjacentes (en haut, gauche, droite)
             AddAdjacentPositions(pos, availablePositions);
         }
 
         InstantiateRooms();
         InstantiateDoors();
+        
+        OnHouseFinishGeneration?.Invoke(RoomManager.instance.GetRoomTransform(Room.Salon).position);
     }
 
     void AddAdjacentPositions(Vector2Int pos, List<Vector2Int> positions)
