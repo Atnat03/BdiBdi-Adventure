@@ -2,10 +2,11 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
+[CreateAssetMenu(menuName = "Furniture")]
 public class FurnitureScriptableObject : ScriptableObject
 {
     public Room typeRoom;
-    public List<FurnitureScriptableObject> furnitures;
+    public List<FurnitureData> furnitures;
 }
 
 [Serializable]

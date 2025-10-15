@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class LayoutGenerator : MonoBehaviour
+public class HouseGenerator : MonoBehaviour
 {
     public List<RoomDataScriptable> availableRooms;
     public int gridSize = 4;
@@ -57,7 +57,6 @@ public class LayoutGenerator : MonoBehaviour
             AddAdjacentPositions(pos, availablePositions);
         }
 
-        PrintGrid();
         InstantiateRooms();
         InstantiateDoors();
     }
@@ -104,8 +103,12 @@ public class LayoutGenerator : MonoBehaviour
                         GameObject instance = Instantiate(roomData.roomPrefab, pos, Quaternion.identity, houseParent);
                         instance.name = $"{name} ({x},{y})";
 
-                        // Enregistrement dans RoomManager
                         RoomManager.instance.RegisterRoom(roomData.type, instance.transform);
+                        
+                        RoomSetUp setUp = instance.GetComponent<RoomSetUp>();
+                        
+                        if(setUp != null)
+                            setUp.SetUp();
                     }
                 }
             }
@@ -162,18 +165,6 @@ void InstantiateDoors()
         }
     }
 }
-
-    void PrintGrid()
-    {
-        Debug.Log("=== Nouvelle Maison Générée ===");
-        for (int y = gridSize - 1; y >= 0; y--)
-        {
-            string row = "";
-            for (int x = 0; x < gridSize; x++)
-                row += (grid[x, y] ?? "___") + " ";
-            Debug.Log(row);
-        }
-    }
 
     void ShuffleList<T>(List<T> list)
     {
