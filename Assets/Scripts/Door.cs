@@ -2,15 +2,20 @@ using UnityEngine;
 
 public class Door : MonoBehaviour
 {
-    [SerializeField] private Room roomIdToGo;
-    [SerializeField] private Transform doorRoomToGo;
-    [SerializeField] private Vector3 offset =  new Vector3(0.5f, 0, 0);
+    private Room roomIdToGo;
+    private Vector3 playerSpawnOffset;
 
     public void OnTriggerEnter2D(Collider2D other)
     {
         if (other.CompareTag("Player"))
         {
-            RoomManager.instance.ChangeRoom(roomIdToGo, offset);
+            RoomManager.instance.ChangeRoom(roomIdToGo, playerSpawnOffset);
         }
+    }
+
+    public void SetTargetRoom(Room targetRoom, Vector3 spawnOffset)
+    {
+        roomIdToGo = targetRoom;
+        playerSpawnOffset = spawnOffset;
     }
 }
